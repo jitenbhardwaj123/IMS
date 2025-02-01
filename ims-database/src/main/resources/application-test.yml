@@ -1,0 +1,32 @@
+server:
+  servlet:
+    context-path: /ims
+  port: 8080
+  max-http-header-size: 10000000
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        current_session_context_class: org.springframework.orm.hibernate4.SpringSessionContext
+        default_schema: ims_schema
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL
+  liquibase:
+    change-log: classpath:/changelog/changelog_master.xml
+    default-schema: ims_schema
+    contexts: h2
+  servlet:
+    multipart:
+      max-file-size: 500KB
+      max-request-size: 500KB
+
+logging:
+  level:
+    ROOT: INFO
