@@ -1,0 +1,936 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+	<changeSet id="create_table_privilege" author="vijay.katta">
+		<createTable tableName="privilege">
+			<column name="id" type="bigint" />
+			<column name="name" type="varchar" />
+		</createTable>
+		<createSequence sequenceName="privilege_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="privilege_id_not_null" tableName="privilege" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_privilege_id" tableName="privilege" columnNames="id" />
+		<addNotNullConstraint constraintName="privilege_name_notnull" tableName="privilege" columnName="name" columnDataType="varchar" />
+		<addUniqueConstraint constraintName="privilege_name_unique" tableName="privilege" columnNames="name" />
+	</changeSet>
+
+	<changeSet id="create_table_role" author="vijay.katta">
+		<createTable tableName="role">
+			<column name="id" type="bigint" />
+			<column name="name" type="varchar" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="role_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="role_id_not_null" tableName="role" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_role_id" tableName="role" columnNames="id" />
+		<addNotNullConstraint constraintName="role_name_notnull" tableName="role" columnName="name" columnDataType="varchar" />
+		<addUniqueConstraint constraintName="role_name_unique" tableName="role" columnNames="name" />
+		<addNotNullConstraint constraintName="role_date_created_notnull" tableName="role" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="role_last_updated_notnull" tableName="role" columnName="last_updated" columnDataType="timestamp" />
+	</changeSet>
+
+	<changeSet id="create_table_role_privilege" author="vijay.katta">
+		<createTable tableName="role_privilege">
+			<column name="role_id" type="bigint" />
+			<column name="privilege_id" type="bigint" />
+		</createTable>
+		<addNotNullConstraint constraintName="role_privilege_role_id_not_null" tableName="role_privilege" columnName="role_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="role_privilege_privilege_id_not_null" tableName="role_privilege" columnName="privilege_id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_role_privilege_ids" tableName="role_privilege" columnNames="role_id,privilege_id" />
+		<addForeignKeyConstraint constraintName="fk_role_privilege_role_id" referencedTableName="role" referencedColumnNames="id" 
+										baseColumnNames="role_id" baseTableName="role_privilege" onDelete="CASCADE"/>
+		<addForeignKeyConstraint constraintName="fk_role_privilege_privilege_id" referencedTableName="privilege" referencedColumnNames="id" 
+										baseColumnNames="privilege_id" baseTableName="role_privilege" onDelete="CASCADE"/>
+	</changeSet>
+	
+	<changeSet id="create_table_user" author="vijay.katta">
+		<createTable tableName="user">
+			<column name="id" type="bigint" />
+			<column name="username" type="varchar" />
+			<column name="password" type="varchar" />
+			<column name="first_name" type="varchar" />
+			<column name="last_name" type="varchar" />
+			<column name="email" type="varchar" />
+			<column name="active" type="boolean" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="user_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="user_id_not_null" tableName="user" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_user_id" tableName="user" columnNames="id" />
+		<addNotNullConstraint constraintName="user_username_notnull" tableName="user" columnName="username" columnDataType="varchar" />
+		<addUniqueConstraint constraintName="user_username_unique" tableName="user" columnNames="username" />
+		<addNotNullConstraint constraintName="user_password_notnull" tableName="user" columnName="password" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="user_first_name_notnull" tableName="user" columnName="first_name" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="user_last_name_notnull" tableName="user" columnName="last_name" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="user_email_notnull" tableName="user" columnName="email" columnDataType="varchar" />
+		<addUniqueConstraint constraintName="user_email_unique" tableName="user" columnNames="email" />
+		<addNotNullConstraint constraintName="user_active_notnull" tableName="user" columnName="active" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="user_date_created_notnull" tableName="user" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="user_last_updated_notnull" tableName="user" columnName="last_updated" columnDataType="timestamp" />
+	</changeSet>
+
+	<changeSet id="create_table_user_role" author="vijay.katta">
+		<createTable tableName="user_role">
+			<column name="user_id" type="bigint" />
+			<column name="role_id" type="bigint" />
+		</createTable>
+		<addNotNullConstraint constraintName="user_role_user_id_not_null" tableName="user_role" columnName="user_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="user_role_role_id_not_null" tableName="user_role" columnName="role_id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_user_role_ids" tableName="user_role" columnNames="user_id,role_id" />
+		<addForeignKeyConstraint constraintName="fk_user_role_user_id" referencedTableName="user" referencedColumnNames="id" 
+										baseColumnNames="user_id" baseTableName="user_role" onDelete="CASCADE"/>
+		<addForeignKeyConstraint constraintName="fk_user_role_role_id" referencedTableName="role" referencedColumnNames="id" 
+										baseColumnNames="role_id" baseTableName="user_role" onDelete="CASCADE"/>
+	</changeSet>
+
+	<changeSet id="create_table_asset_type" author="vijay.katta">
+		<createTable tableName="asset_type">
+			<column name="id" type="bigint" />
+			<column name="name" type="varchar" remarks="Asset Type Name" />
+			<column name="description" type="varchar" remarks="Asset Type Description" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="asset_type_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="asset_type_id_not_null" tableName="asset_type" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_asset_type_id" tableName="asset_type" columnNames="id" />
+		<addNotNullConstraint constraintName="asset_type_name_notnull" tableName="asset_type" columnName="name" columnDataType="varchar" />
+		<addUniqueConstraint constraintName="asset_type_name_unique" tableName="asset_type" columnNames="name" />
+		<addNotNullConstraint constraintName="asset_type_description_notnull" tableName="asset_type" columnName="description" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="asset_type_date_created_notnull" tableName="asset_type" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="asset_type_last_updated_notnull" tableName="asset_type" columnName="last_updated" columnDataType="timestamp" />
+	</changeSet>
+
+	<changeSet id="create_table_asset" author="vijay.katta">
+		<createTable tableName="asset">
+			<column name="id" type="bigint" />
+			<column name="name" type="varchar" remarks="Asset Name" />
+			<column name="asset_type_id" type="bigint"  remarks="Asset Type"/>
+			<column name="parent_asset_id" type="bigint"  remarks="Parent Asset"/>
+			<column name="child_order" type="bigint"  remarks="Child Order"/>
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="asset_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="asset_id_not_null" tableName="asset" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_asset_id" tableName="asset" columnNames="id" />
+		<addNotNullConstraint constraintName="asset_name_notnull" tableName="asset" columnName="name" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="asset_type_notnull" tableName="asset" columnName="asset_type_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="asset_date_created_notnull" tableName="asset" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="asset_last_updated_notnull" tableName="asset" columnName="last_updated" columnDataType="timestamp" />
+		<addUniqueConstraint constraintName="asset_unique" tableName="asset" columnNames="name,asset_type_id,parent_asset_id" />
+		<addForeignKeyConstraint constraintName="fk_ast_parent_asset" referencedTableName="asset" referencedColumnNames="id" 
+										baseColumnNames="parent_asset_id" baseTableName="asset" onDelete="CASCADE"/>
+		<addForeignKeyConstraint constraintName="fk_ast_type" referencedTableName="asset_type" referencedColumnNames="id" 
+										baseColumnNames="asset_type_id" baseTableName="asset" onDelete="CASCADE"/>
+	</changeSet>
+
+	<changeSet id="create_table_source" author="vijay.katta">
+		<createTable tableName="source">
+			<column name="id" type="bigint" />
+			<column name="name" type="varchar" remarks="Data Source Name" />
+			<column name="description" type="varchar" remarks="Data Source Description" />
+			<column name="manual_source" type="boolean" remarks="Manually measured data or automatic data" />
+			<column name="tag_based" type="boolean" remarks="Tag based data or not" />
+			<column name="editable" type="boolean" remarks="Data editable in IMS" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="source_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="source_id_not_null" tableName="source" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_source_id" tableName="source" columnNames="id" />
+		<addNotNullConstraint constraintName="source_name_notnull" tableName="source" columnName="name" columnDataType="varchar" />
+		<addUniqueConstraint constraintName="source_name_unique" tableName="source" columnNames="name" />
+		<addNotNullConstraint constraintName="source_description_notnull" tableName="source" columnName="description" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="source_manual_source_notnull" tableName="source" columnName="manual_source" columnDataType="boolean" />
+		<addNotNullConstraint constraintName="source_tag_based_notnull" tableName="source" columnName="tag_based" columnDataType="boolean" />
+		<addNotNullConstraint constraintName="source_editable_notnull" tableName="source" columnName="editable" columnDataType="boolean" />
+		<addNotNullConstraint constraintName="source_date_created_notnull" tableName="source" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="source_last_updated_notnull" tableName="source" columnName="last_updated" columnDataType="timestamp" />
+	</changeSet>
+
+	<changeSet id="create_table_unit_type" author="vijay.katta">
+		<createTable tableName="unit_type">
+			<column name="id" type="bigint" />
+			<column name="name" type="varchar" remarks="Unit Type Name" />
+			<column name="description" type="varchar" remarks="Unit Type Description" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="unit_type_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="unit_type_id_not_null" tableName="unit_type" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_unit_type_id" tableName="unit_type" columnNames="id" />
+		<addNotNullConstraint constraintName="unit_type_name_notnull" tableName="unit_type" columnName="name" columnDataType="varchar" />
+		<addUniqueConstraint constraintName="unit_type_name_unique" tableName="unit_type" columnNames="name" />
+		<addNotNullConstraint constraintName="unit_type_description_notnull" tableName="unit_type" columnName="description" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="unit_type_date_created_notnull" tableName="unit_type" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="unit_type_last_updated_notnull" tableName="unit_type" columnName="last_updated" columnDataType="timestamp" />
+	</changeSet>
+
+	<changeSet id="create_table_unit" author="vijay.katta">
+		<createTable tableName="unit">
+			<column name="id" type="bigint" />
+			<column name="name" type="varchar" remarks="Unit Name" />
+			<column name="description" type="varchar" remarks="Unit Description" />
+			<column name="unit_type_id" type="bigint" remarks="Unit Type" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="unit_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="unit_id_not_null" tableName="unit" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_unit_id" tableName="unit" columnNames="id" />
+		<addNotNullConstraint constraintName="unit_name_notnull" tableName="unit" columnName="name" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="unit_type_notnull" tableName="unit" columnName="unit_type_id" columnDataType="bigint" />
+		<addUniqueConstraint constraintName="unit_unit_type_name_unique" tableName="unit" columnNames="unit_type_id,name" />
+		<addNotNullConstraint constraintName="unit_description_notnull" tableName="unit" columnName="description" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="unit_date_created_notnull" tableName="unit" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="unit_last_updated_notnull" tableName="unit" columnName="last_updated" columnDataType="timestamp" />
+		<addForeignKeyConstraint constraintName="fk_unit_unit_type" referencedTableName="unit_type" referencedColumnNames="id" 
+										baseColumnNames="unit_type_id" baseTableName="unit" onDelete="CASCADE"/>
+	</changeSet>
+
+	<changeSet id="create_table_limit_type" author="vijay.katta">
+		<createTable tableName="limit_type">
+			<column name="id" type="bigint" />
+			<column name="name" type="varchar" remarks="Limit Type Name" />
+			<column name="description" type="varchar" remarks="Limit Type Description" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="limit_type_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="limit_type_id_not_null" tableName="limit_type" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_limit_type_id" tableName="limit_type" columnNames="id" />
+		<addNotNullConstraint constraintName="limit_type_name_notnull" tableName="limit_type" columnName="name" columnDataType="varchar" />
+		<addUniqueConstraint constraintName="limit_type_name_unique" tableName="limit_type" columnNames="name" />
+		<addNotNullConstraint constraintName="limit_type_description_notnull" tableName="limit_type" columnName="description" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="limit_type_date_created_notnull" tableName="limit_type" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="limit_type_last_updated_notnull" tableName="limit_type" columnName="last_updated" columnDataType="timestamp" />
+	</changeSet>
+
+	<changeSet id="create_table_limit" author="vijay.katta">
+		<createTable tableName="limit">
+			<column name="id" type="bigint" />
+			<column name="name" type="varchar" remarks="Limit Name" />
+			<column name="asset_id" type="bigint" remarks="Asset" />
+			<column name="element_id" type="bigint" remarks="Element" />
+			<column name="limit_type_id" type="bigint" remarks="Limit Type" />
+			<column name="source_id" type="bigint" remarks="Source" />
+			<column name="start_date" type="timestamp" remarks="Limit Start Date" />
+			<column name="end_date" type="timestamp" remarks="Limit End Date" />
+			<column name="lower_limit" type="numeric" remarks="Lower bound value" />
+			<column name="upper_limit" type="numeric" remarks="Upper bound value" />
+			<column name="unit_id" type="bigint" remarks="Limit Unit" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="limit_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="limit_id_not_null" tableName="limit" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_limit_id" tableName="limit" columnNames="id" />
+		<addNotNullConstraint constraintName="limit_name_notnull" tableName="limit" columnName="name" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="limit_asset_id_notnull" tableName="limit" columnName="asset_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="limit_element_id_notnull" tableName="limit" columnName="element_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="limit_type_id_notnull" tableName="limit" columnName="limit_type_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="limit_source_id_notnull" tableName="limit" columnName="source_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="limit_start_date_notnull" tableName="limit" columnName="start_date" columnDataType="timestamp" />
+		<addUniqueConstraint constraintName="limit_reading_unique" tableName="limit" columnNames="asset_id,element_id,limit_type_id,source_id,start_date" />
+		<addNotNullConstraint constraintName="limit_date_created_notnull" tableName="limit" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="limit_last_updated_notnull" tableName="limit" columnName="last_updated" columnDataType="timestamp" />
+	</changeSet>
+
+	<changeSet id="create_table_measurement_location" author="vijay.katta">
+		<createTable tableName="measurement_location">
+			<column name="id" type="bigint" />
+			<column name="name" type="varchar" remarks="Measurement Location Name" />
+			<column name="description" type="varchar" remarks="Measurement Location Description" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="measurement_location_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="measurement_location_id_not_null" tableName="measurement_location" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_measurement_location_id" tableName="measurement_location" columnNames="id" />
+		<addNotNullConstraint constraintName="measurement_location_name_notnull" tableName="measurement_location" columnName="name" columnDataType="varchar" />
+		<addUniqueConstraint constraintName="measurement_location_name_unique" tableName="measurement_location" columnNames="name" />
+		<addNotNullConstraint constraintName="measurement_location_description_notnull" tableName="measurement_location" columnName="description" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="measurement_location_date_created_notnull" tableName="measurement_location" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="measurement_location_last_updated_notnull" tableName="measurement_location" columnName="last_updated" columnDataType="timestamp" />
+	</changeSet>
+
+	<changeSet id="create_table_file_resource" author="vijay.katta">
+		<createTable tableName="file_resource" >
+			<column name="id" type="bigint" />
+			<column name="raw_data" type="bytea" />
+			<column name="file_name" type="varchar" />
+			<column name="file_extension" type="varchar" />
+			<column name="file_size" type="number"/>
+			<column name="http_content_type" type="varchar" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="file_resource_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="file_resource_id_notnull" tableName="file_resource" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="file_resource_pk" tableName="file_resource" columnNames="id"  />
+		<addNotNullConstraint constraintName="file_resource_raw_data_notnull" tableName="file_resource" columnName="raw_data" columnDataType="bytea" />
+		<addNotNullConstraint constraintName="file_resource_file_name_notnull" tableName="file_resource" columnName="file_name" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="file_resource_file_extension_notnull" tableName="file_resource" columnName="file_extension" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="file_resource_file_size_notnull" tableName="file_resource" columnName="file_size" columnDataType="number" />
+		<addNotNullConstraint constraintName="file_resource_date_created_notnull" tableName="file_resource" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="file_resource_last_updated_notnull" tableName="file_resource" columnName="last_updated" columnDataType="timestamp" />
+	</changeSet>
+
+	<changeSet id="create_table_upload_record" author="vijay.katta">
+		<createTable tableName="upload_record" >
+			<column name="id" type="bigint" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="upload_record_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="upload_record_id_notnull" tableName="upload_record" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="upload_record_pk" tableName="upload_record" columnNames="id"  />
+		<addNotNullConstraint constraintName="upload_record_date_created_notnull" tableName="upload_record" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="upload_record_last_updated_notnull" tableName="upload_record" columnName="last_updated" columnDataType="timestamp" />
+	</changeSet>
+
+	<changeSet id="create_table_upload_record_file_resource" author="vijay.katta">
+		<createTable tableName="upload_record_file_resource" >
+			<column name="upload_record_id" type="bigint" />
+			<column name="file_resource_id" type="bigint" />
+		</createTable>
+		<addNotNullConstraint constraintName="urfr_upload_record_id_notnull" tableName="upload_record_file_resource" columnName="upload_record_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="urfr_file_resource_id_notnull" tableName="upload_record_file_resource" columnName="file_resource_id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="upload_record_file_resource_pk" tableName="upload_record_file_resource" columnNames="upload_record_id,file_resource_id"  />
+		<addForeignKeyConstraint constraintName="fk_urfr_upload_record_id" referencedTableName="upload_record" referencedColumnNames="id" 
+										baseColumnNames="upload_record_id" baseTableName="upload_record_file_resource" onDelete="CASCADE"/>
+	</changeSet>
+
+	<changeSet id="create_table_link_record" author="vijay.katta">
+		<createTable tableName="link_record" >
+			<column name="id" type="bigint" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="link_record_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="link_record_id_notnull" tableName="link_record" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="link_record_pk" tableName="link_record" columnNames="id"  />
+		<addNotNullConstraint constraintName="link_record_date_created_notnull" tableName="link_record" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="link_record_last_updated_notnull" tableName="link_record" columnName="last_updated" columnDataType="timestamp" />
+	</changeSet>
+
+	<changeSet id="create_table_link_record_link" author="vijay.katta">
+		<createTable tableName="link_record_link" >
+			<column name="link_record_id" type="bigint" />
+			<column name="http_link" type="varchar" />
+		</createTable>
+		<addNotNullConstraint constraintName="lrlc_link_record_id_notnull" tableName="link_record_link" columnName="link_record_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="lrlc_http_link_notnull" tableName="link_record_link" columnName="http_link" columnDataType="varchar" />
+		<addPrimaryKey constraintName="link_record_link_pk" tableName="link_record_link" columnNames="link_record_id,http_link"  />
+		<addForeignKeyConstraint constraintName="fk_lrlc_link_record_id" referencedTableName="link_record" referencedColumnNames="id" 
+										baseColumnNames="link_record_id" baseTableName="link_record_link" onDelete="CASCADE"/>
+	</changeSet>
+
+	<changeSet id="create_table_element" author="vijay.katta">
+		<createTable tableName="element">
+			<column name="id" type="bigint" />
+			<column name="name" type="varchar" remarks="Element Name" />
+			<column name="description" type="varchar" remarks="Element Description" />
+			<column name="measurement_location_id" type="bigint" remarks="Measurement Location" />
+			<column name="unit_type_id" type="bigint" remarks="Unit Type" />
+			<column name="measurement_type" type="varchar" remarks="Measurement Type" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="element_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="element_id_not_null" tableName="element" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_element_id" tableName="element" columnNames="id" />
+		<addNotNullConstraint constraintName="element_name_notnull" tableName="element" columnName="name" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="element_description_notnull" tableName="element" columnName="description" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="measurement_location_notnull" tableName="element" columnName="measurement_location_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="measurement_type_notnull" tableName="element" columnName="measurement_type" columnDataType="varchar" />
+		<addUniqueConstraint constraintName="element_name_location_unique" tableName="element" columnNames="name,measurement_location_id" />
+		<addNotNullConstraint constraintName="element_date_created_notnull" tableName="element" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="element_last_updated_notnull" tableName="element" columnName="last_updated" columnDataType="timestamp" />
+		<addForeignKeyConstraint constraintName="fk_element_mloc_id" referencedTableName="measurement_location" referencedColumnNames="id" 
+										baseColumnNames="measurement_location_id" baseTableName="element" onDelete="CASCADE"/>
+		<addForeignKeyConstraint constraintName="fk_element_unit_type_id" referencedTableName="unit_type" referencedColumnNames="id" 
+										baseColumnNames="unit_type_id" baseTableName="element" onDelete="CASCADE"/>
+	</changeSet>
+
+	<changeSet id="create_table_measurement_text_option" author="vijay.katta">
+		<createTable tableName="measurement_text_option">
+			<column name="element_id" type="bigint" remarks="Element" />
+			<column name="option" type="varchar" remarks="Option Text" />
+			<column name="option_order" type="bigint" remarks="Option Order" />
+		</createTable>
+		<addNotNullConstraint constraintName="mto_element_notnull" tableName="measurement_text_option" columnName="element_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="mto_option_notnull" tableName="measurement_text_option" columnName="option" columnDataType="varchar" />
+		<addPrimaryKey constraintName="pk_mto_id" tableName="measurement_text_option" columnNames="element_id,option" />
+		<addNotNullConstraint constraintName="mto_option_order_notnull" tableName="measurement_text_option" columnName="option_order" columnDataType="bigint" />
+		<addForeignKeyConstraint constraintName="fk_mto_element_id" referencedTableName="element" referencedColumnNames="id" 
+										baseColumnNames="element_id" baseTableName="measurement_text_option" onDelete="CASCADE"/>
+	</changeSet>
+
+	<changeSet id="create_table_measurement_boolean_option" author="vijay.katta">
+		<createTable tableName="measurement_boolean_option">
+			<column name="element_id" type="bigint" remarks="Element" />
+			<column name="true_option" type="varchar" remarks="True value text" />
+			<column name="false_option" type="varchar" remarks="False value text" />
+		</createTable>
+		<addNotNullConstraint constraintName="mbo_element_notnull" tableName="measurement_boolean_option" columnName="element_id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_mbo_id" tableName="measurement_boolean_option" columnNames="element_id" />
+		<addNotNullConstraint constraintName="mbo_true_option_notnull" tableName="measurement_boolean_option" columnName="true_option" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="mbo_false_option_notnull" tableName="measurement_boolean_option" columnName="false_option" columnDataType="varchar" />
+		<addForeignKeyConstraint constraintName="fk_mbo_element_id" referencedTableName="element" referencedColumnNames="id" 
+										baseColumnNames="element_id" baseTableName="measurement_boolean_option" onDelete="CASCADE"/>
+	</changeSet>
+
+	<changeSet id="create_table_snapshot_decimal_data" author="vijay.katta">
+		<createTable tableName="snapshot_decimal_data">
+			<column name="id" type="bigint" />
+			<column name="asset_id" type="bigint" remarks="Asset" />
+			<column name="element_id" type="bigint" remarks="Element" />
+			<column name="source_id" type="bigint" remarks="Source" />
+			<column name="reading_date" type="timestamp" remarks="Reading date" />
+			<column name="reading" type="numeric" remarks="Value" />
+			<column name="unit_id" type="bigint" remarks="Reading Unit" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="snapshot_decimal_data_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="sdd_id_not_null" tableName="snapshot_decimal_data" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_sdd_id" tableName="snapshot_decimal_data" columnNames="id" />
+		<addNotNullConstraint constraintName="sdd_asset_id_notnull" tableName="snapshot_decimal_data" columnName="asset_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="sdd_element_id_notnull" tableName="snapshot_decimal_data" columnName="element_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="sdd_source_id_notnull" tableName="snapshot_decimal_data" columnName="source_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="sdd_reading_date_notnull" tableName="snapshot_decimal_data" columnName="reading_date" columnDataType="timestamp" />
+		<addUniqueConstraint constraintName="sdd_reading_unique" tableName="snapshot_decimal_data" columnNames="asset_id,element_id,source_id,reading_date" />
+		<addNotNullConstraint constraintName="sdd_date_created_notnull" tableName="snapshot_decimal_data" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="sdd_last_updated_notnull" tableName="snapshot_decimal_data" columnName="last_updated" columnDataType="timestamp" />
+	</changeSet>
+
+	<changeSet id="create_table_snapshot_text_data" author="vijay.katta">
+		<createTable tableName="snapshot_text_data">
+			<column name="id" type="bigint" />
+			<column name="asset_id" type="bigint" remarks="Asset" />
+			<column name="element_id" type="bigint" remarks="Element" />
+			<column name="source_id" type="bigint" remarks="Source" />
+			<column name="reading_date" type="timestamp" remarks="Reading date" />
+			<column name="reading" type="varchar" remarks="Value" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="snapshot_text_data_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="std_id_not_null" tableName="snapshot_text_data" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_std_id" tableName="snapshot_text_data" columnNames="id" />
+		<addNotNullConstraint constraintName="std_asset_id_notnull" tableName="snapshot_text_data" columnName="asset_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="std_element_id_notnull" tableName="snapshot_text_data" columnName="element_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="std_source_id_notnull" tableName="snapshot_text_data" columnName="source_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="std_reading_date_notnull" tableName="snapshot_text_data" columnName="reading_date" columnDataType="timestamp" />
+		<addUniqueConstraint constraintName="std_reading_unique" tableName="snapshot_text_data" columnNames="asset_id,element_id,source_id,reading_date" />
+		<addNotNullConstraint constraintName="std_date_created_notnull" tableName="snapshot_text_data" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="std_last_updated_notnull" tableName="snapshot_text_data" columnName="last_updated" columnDataType="timestamp" />
+	</changeSet>
+
+	<changeSet id="create_table_snapshot_boolean_data" author="vijay.katta">
+		<createTable tableName="snapshot_boolean_data">
+			<column name="id" type="bigint" />
+			<column name="asset_id" type="bigint" remarks="Asset" />
+			<column name="element_id" type="bigint" remarks="Element" />
+			<column name="source_id" type="bigint" remarks="Source" />
+			<column name="reading_date" type="timestamp" remarks="Reading date" />
+			<column name="reading" type="boolean" remarks="Value" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="snapshot_boolean_data_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="sbd_id_not_null" tableName="snapshot_boolean_data" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_sbd_id" tableName="snapshot_boolean_data" columnNames="id" />
+		<addNotNullConstraint constraintName="sbd_asset_id_notnull" tableName="snapshot_boolean_data" columnName="asset_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="sbd_element_id_notnull" tableName="snapshot_boolean_data" columnName="element_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="sbd_source_id_notnull" tableName="snapshot_boolean_data" columnName="source_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="sbd_reading_date_notnull" tableName="snapshot_boolean_data" columnName="reading_date" columnDataType="timestamp" />
+		<addUniqueConstraint constraintName="sbd_reading_unique" tableName="snapshot_boolean_data" columnNames="asset_id,element_id,source_id,reading_date" />
+		<addNotNullConstraint constraintName="sbd_date_created_notnull" tableName="snapshot_boolean_data" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="sbd_last_updated_notnull" tableName="snapshot_boolean_data" columnName="last_updated" columnDataType="timestamp" />
+	</changeSet>
+
+	<changeSet id="create_table_snapshot_link_data" author="vijay.katta">
+		<createTable tableName="snapshot_link_data">
+			<column name="id" type="bigint" />
+			<column name="asset_id" type="bigint" remarks="Asset" />
+			<column name="element_id" type="bigint" remarks="Element" />
+			<column name="source_id" type="bigint" remarks="Source" />
+			<column name="reading_date" type="timestamp" remarks="Reading date" />
+			<column name="link_record_id" type="bigint" remarks="Links" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="snapshot_link_data_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="sld_id_not_null" tableName="snapshot_link_data" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_sld_id" tableName="snapshot_link_data" columnNames="id" />
+		<addNotNullConstraint constraintName="sld_asset_id_notnull" tableName="snapshot_link_data" columnName="asset_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="sld_element_id_notnull" tableName="snapshot_link_data" columnName="element_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="sld_source_id_notnull" tableName="snapshot_link_data" columnName="source_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="sld_reading_date_notnull" tableName="snapshot_link_data" columnName="reading_date" columnDataType="timestamp" />
+		<addUniqueConstraint constraintName="sld_reading_unique" tableName="snapshot_link_data" columnNames="asset_id,element_id,source_id,reading_date" />
+		<addNotNullConstraint constraintName="sld_date_created_notnull" tableName="snapshot_link_data" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="sld_last_updated_notnull" tableName="snapshot_link_data" columnName="last_updated" columnDataType="timestamp" />
+	</changeSet>
+
+	<changeSet id="create_table_snapshot_upload_data" author="vijay.katta">
+		<createTable tableName="snapshot_upload_data">
+			<column name="id" type="bigint" />
+			<column name="asset_id" type="bigint" remarks="Asset" />
+			<column name="element_id" type="bigint" remarks="Element" />
+			<column name="source_id" type="bigint" remarks="Source" />
+			<column name="reading_date" type="timestamp" remarks="Reading date" />
+			<column name="upload_record_id" type="bigint" remarks="Files" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="snapshot_upload_data_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="sud_id_not_null" tableName="snapshot_upload_data" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_sud_id" tableName="snapshot_upload_data" columnNames="id" />
+		<addNotNullConstraint constraintName="sud_asset_id_notnull" tableName="snapshot_upload_data" columnName="asset_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="sud_element_id_notnull" tableName="snapshot_upload_data" columnName="element_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="sud_source_id_notnull" tableName="snapshot_upload_data" columnName="source_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="sud_reading_date_notnull" tableName="snapshot_upload_data" columnName="reading_date" columnDataType="timestamp" />
+		<addUniqueConstraint constraintName="sud_reading_unique" tableName="snapshot_upload_data" columnNames="asset_id,element_id,source_id,reading_date" />
+		<addNotNullConstraint constraintName="sud_date_created_notnull" tableName="snapshot_upload_data" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="sud_last_updated_notnull" tableName="snapshot_upload_data" columnName="last_updated" columnDataType="timestamp" />
+	</changeSet>
+
+	<changeSet id="create_table_range_decimal_data" author="vijay.katta">
+		<createTable tableName="range_decimal_data">
+			<column name="id" type="bigint" />
+			<column name="asset_id" type="bigint" remarks="Asset" />
+			<column name="element_id" type="bigint" remarks="Element" />
+			<column name="source_id" type="bigint" remarks="Source" />
+			<column name="start_date" type="timestamp" remarks="Start date" />
+			<column name="end_date" type="timestamp" remarks="End date" />
+			<column name="reading" type="numeric" remarks="Value" />
+			<column name="unit_id" type="bigint" remarks="Reading Unit" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="range_decimal_data_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="rdd_id_not_null" tableName="range_decimal_data" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_rdd_id" tableName="range_decimal_data" columnNames="id" />
+		<addNotNullConstraint constraintName="rdd_asset_id_notnull" tableName="range_decimal_data" columnName="asset_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="rdd_element_id_notnull" tableName="range_decimal_data" columnName="element_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="rdd_source_id_notnull" tableName="range_decimal_data" columnName="source_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="rdd_start_date_notnull" tableName="range_decimal_data" columnName="start_date" columnDataType="timestamp" />
+		<addUniqueConstraint constraintName="rdd_reading_unique" tableName="range_decimal_data" columnNames="asset_id,element_id,source_id,start_date" />
+		<addNotNullConstraint constraintName="rdd_date_created_notnull" tableName="range_decimal_data" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="rdd_last_updated_notnull" tableName="range_decimal_data" columnName="last_updated" columnDataType="timestamp" />
+	</changeSet>
+
+	<changeSet id="create_table_range_text_data" author="vijay.katta">
+		<createTable tableName="range_text_data">
+			<column name="id" type="bigint" />
+			<column name="asset_id" type="bigint" remarks="Asset" />
+			<column name="element_id" type="bigint" remarks="Element" />
+			<column name="source_id" type="bigint" remarks="Source" />
+			<column name="start_date" type="timestamp" remarks="Start date" />
+			<column name="end_date" type="timestamp" remarks="End date" />
+			<column name="reading" type="varchar" remarks="Value" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="range_text_data_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="rtd_id_not_null" tableName="range_text_data" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_rtd_id" tableName="range_text_data" columnNames="id" />
+		<addNotNullConstraint constraintName="rtd_asset_id_notnull" tableName="range_text_data" columnName="asset_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="rtd_element_id_notnull" tableName="range_text_data" columnName="element_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="rtd_source_id_notnull" tableName="range_text_data" columnName="source_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="rtd_start_date_notnull" tableName="range_text_data" columnName="start_date" columnDataType="timestamp" />
+		<addUniqueConstraint constraintName="rtd_reading_unique" tableName="range_text_data" columnNames="asset_id,element_id,source_id,start_date" />
+		<addNotNullConstraint constraintName="rtd_date_created_notnull" tableName="range_text_data" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="rtd_last_updated_notnull" tableName="range_text_data" columnName="last_updated" columnDataType="timestamp" />
+	</changeSet>
+
+	<changeSet id="create_table_range_boolean_data" author="vijay.katta">
+		<createTable tableName="range_boolean_data">
+			<column name="id" type="bigint" />
+			<column name="asset_id" type="bigint" remarks="Asset" />
+			<column name="element_id" type="bigint" remarks="Element" />
+			<column name="source_id" type="bigint" remarks="Source" />
+			<column name="start_date" type="timestamp" remarks="Start date" />
+			<column name="end_date" type="timestamp" remarks="End date" />
+			<column name="reading" type="boolean" remarks="Value" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="range_boolean_data_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="rbd_id_not_null" tableName="range_boolean_data" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_rbd_id" tableName="range_boolean_data" columnNames="id" />
+		<addNotNullConstraint constraintName="rbd_asset_id_notnull" tableName="range_boolean_data" columnName="asset_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="rbd_element_id_notnull" tableName="range_boolean_data" columnName="element_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="rbd_source_id_notnull" tableName="range_boolean_data" columnName="source_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="rbd_start_date_notnull" tableName="range_boolean_data" columnName="start_date" columnDataType="timestamp" />
+		<addUniqueConstraint constraintName="rbd_reading_unique" tableName="range_boolean_data" columnNames="asset_id,element_id,source_id,start_date" />
+		<addNotNullConstraint constraintName="rbd_date_created_notnull" tableName="range_boolean_data" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="rbd_last_updated_notnull" tableName="range_boolean_data" columnName="last_updated" columnDataType="timestamp" />
+	</changeSet>
+
+	<changeSet id="create_table_range_link_data" author="vijay.katta">
+		<createTable tableName="range_link_data">
+			<column name="id" type="bigint" />
+			<column name="asset_id" type="bigint" remarks="Asset" />
+			<column name="element_id" type="bigint" remarks="Element" />
+			<column name="source_id" type="bigint" remarks="Source" />
+			<column name="start_date" type="timestamp" remarks="Start date" />
+			<column name="end_date" type="timestamp" remarks="End date" />
+			<column name="link_record_id" type="bigint" remarks="Links" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="range_link_data_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="rld_id_not_null" tableName="range_link_data" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_rld_id" tableName="range_link_data" columnNames="id" />
+		<addNotNullConstraint constraintName="rld_asset_id_notnull" tableName="range_link_data" columnName="asset_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="rld_element_id_notnull" tableName="range_link_data" columnName="element_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="rld_source_id_notnull" tableName="range_link_data" columnName="source_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="rld_start_date_notnull" tableName="range_link_data" columnName="start_date" columnDataType="timestamp" />
+		<addUniqueConstraint constraintName="rld_reading_unique" tableName="range_link_data" columnNames="asset_id,element_id,source_id,start_date" />
+		<addNotNullConstraint constraintName="rld_date_created_notnull" tableName="range_link_data" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="rld_last_updated_notnull" tableName="range_link_data" columnName="last_updated" columnDataType="timestamp" />
+	</changeSet>
+
+	<changeSet id="create_table_range_upload_data" author="vijay.katta">
+		<createTable tableName="range_upload_data">
+			<column name="id" type="bigint" />
+			<column name="asset_id" type="bigint" remarks="Asset" />
+			<column name="element_id" type="bigint" remarks="Element" />
+			<column name="source_id" type="bigint" remarks="Source" />
+			<column name="start_date" type="timestamp" remarks="Start date" />
+			<column name="end_date" type="timestamp" remarks="End date" />
+			<column name="upload_record_id" type="bigint" remarks="Files" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="range_upload_data_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="rud_id_not_null" tableName="range_upload_data" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_rud_id" tableName="range_upload_data" columnNames="id" />
+		<addNotNullConstraint constraintName="rud_asset_id_notnull" tableName="range_upload_data" columnName="asset_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="rud_element_id_notnull" tableName="range_upload_data" columnName="element_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="rud_source_id_notnull" tableName="range_upload_data" columnName="source_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="rud_start_date_notnull" tableName="range_upload_data" columnName="start_date" columnDataType="timestamp" />
+		<addUniqueConstraint constraintName="rud_reading_unique" tableName="range_upload_data" columnNames="asset_id,element_id,source_id,start_date" />
+		<addNotNullConstraint constraintName="rud_date_created_notnull" tableName="range_upload_data" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="rud_last_updated_notnull" tableName="range_upload_data" columnName="last_updated" columnDataType="timestamp" />
+	</changeSet>
+
+	<changeSet id="create_table_filter_criteria" author="vijay.katta">
+		<createTable tableName="filter_criteria">
+			<column name="id" type="bigint" />
+			<column name="name" type="varchar" remarks="Data Source Name" />
+			<column name="include_nested_assets" type="boolean" remarks="Include data for nested assets" />
+			<column name="default_search_days" type="bigint" remarks="Default Search Days" />
+			<column name="date_range_filter_enabled" type="boolean" remarks="Enable Date Range Filter" />
+			<column name="asset_filter_enabled" type="boolean" remarks="Enable Asset Filter" />
+			<column name="element_filter_enabled" type="boolean" remarks="Enable Element Filter" />
+			<column name="aggregation_filter_enabled" type="boolean" remarks="Enable Aggregation Filter" />
+			<column name="default_aggregation_type" type="varchar" remarks="Default Aggregation Type" />
+			<column name="default_aggregation_interval" type="varchar" remarks="Default Aggregation Interval" />
+			<column name="default_aggregation_time" type="bigint" remarks="Default Aggregation Time" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="filter_crit_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="filter_criteria_id_not_null" tableName="filter_criteria" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_filter_criteria_id" tableName="filter_criteria" columnNames="id" />
+		<addNotNullConstraint constraintName="filter_criteria_name_notnull" tableName="filter_criteria" columnName="name" columnDataType="varchar" />
+		<addUniqueConstraint constraintName="filter_criteria_name_unique" tableName="filter_criteria" columnNames="name" />
+		<addNotNullConstraint constraintName="filter_criteria_default_search_days_notnull" tableName="filter_criteria" columnName="default_search_days" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="filter_criteria_nested_data_notnull" tableName="filter_criteria" columnName="include_nested_assets" columnDataType="boolean" />
+		<addNotNullConstraint constraintName="filter_criteria_date_range_filter_enabled_notnull" tableName="filter_criteria" columnName="date_range_filter_enabled" columnDataType="boolean" />
+		<addNotNullConstraint constraintName="filter_criteria_asset_filter_enabled_notnull" tableName="filter_criteria" columnName="asset_filter_enabled" columnDataType="boolean" />
+		<addNotNullConstraint constraintName="filter_criteria_element_filter_enabled_notnull" tableName="filter_criteria" columnName="element_filter_enabled" columnDataType="boolean" />
+		<addNotNullConstraint constraintName="filter_criteria_aggregation_filter_enabled_notnull" tableName="filter_criteria" columnName="aggregation_filter_enabled" columnDataType="boolean" />
+		<addNotNullConstraint constraintName="filter_criteria_date_created_notnull" tableName="filter_criteria" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="filter_criteria_last_updated_notnull" tableName="filter_criteria" columnName="last_updated" columnDataType="timestamp" />
+	</changeSet>
+
+	<changeSet id="create_table_widget" author="vijay.katta">
+		<createTable tableName="widget">
+			<column name="id" type="bigint" />
+			<column name="widget_type" type="varchar" remarks="Widget Type" />
+			<column name="name" type="varchar" remarks="Widget Name" />
+			<column name="description" type="varchar" remarks="Widget Description" />
+			<column name="filter_criteria_id" type="bigint" remarks="Filter Criteria" />
+			<column name="date_format" type="varchar" remarks="Start/Reading/End Date Format" />
+			<column name="reading_date_label" type="varchar" remarks="Start/Reading Date Label" />
+			<column name="end_date_label" type="varchar" remarks="End Date Label" />
+			<column name="exportable" type="boolean" remarks="Widget data exportable" />
+			<column name="emailable" type="boolean" remarks="Widget emailable" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="widget_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="widget_id_not_null" tableName="widget" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_widget_id" tableName="widget" columnNames="id" />
+		<addNotNullConstraint constraintName="widget_widget_type_notnull" tableName="widget" columnName="widget_type" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="widget_name_notnull" tableName="widget" columnName="name" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="widget_description_notnull" tableName="widget" columnName="description" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="widget_filter_criteria_id_notnull" tableName="widget" columnName="filter_criteria_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="widget_date_format_notnull" tableName="widget" columnName="date_format" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="widget_reading_date_label_notnull" tableName="widget" columnName="reading_date_label" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="widget_end_date_label_notnull" tableName="widget" columnName="end_date_label" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="widget_exportable_notnull" tableName="widget" columnName="exportable" columnDataType="boolean" />
+		<addNotNullConstraint constraintName="widget_emailable_notnull" tableName="widget" columnName="emailable" columnDataType="boolean" />
+		<addNotNullConstraint constraintName="widget_date_created_notnull" tableName="widget" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="widget_last_updated_notnull" tableName="widget" columnName="last_updated" columnDataType="timestamp" />
+		<addForeignKeyConstraint constraintName="fk_widget_filter_criteria_id" referencedTableName="filter_criteria" referencedColumnNames="id" 
+										baseColumnNames="filter_criteria_id" baseTableName="widget" onDelete="CASCADE"/>
+	</changeSet>
+
+	<changeSet id="create_table_widget_asset_type" author="vijay.katta">
+		<createTable tableName="widget_asset_type">
+			<column name="widget_id" type="bigint" remarks="Widget" />
+			<column name="asset_type_id" type="bigint" remarks="Applicable Asset Type" />
+		</createTable>
+		<addNotNullConstraint constraintName="widget_asset_type_widget_id_notnull" tableName="widget_asset_type" columnName="widget_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="widget_asset_type_asset_type_id_notnull" tableName="widget_asset_type" columnName="asset_type_id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_widget_asset_type" tableName="widget_asset_type" columnNames="widget_id,asset_type_id" />
+		<addForeignKeyConstraint constraintName="fk_widget_asset_type_widget_id" referencedTableName="widget" referencedColumnNames="id" 
+										baseColumnNames="widget_id" baseTableName="widget_asset_type" onDelete="CASCADE"/>
+		<addForeignKeyConstraint constraintName="fk_widget_asset_type_asset_type_id" referencedTableName="asset_type" referencedColumnNames="id" 
+										baseColumnNames="asset_type_id" baseTableName="widget_asset_type" onDelete="CASCADE"/>
+	</changeSet>
+
+	<changeSet id="create_table_widget_element" author="vijay.katta">
+		<createTable tableName="widget_element">
+			<column name="id" type="bigint" />
+			<column name="widget_id" type="bigint" remarks="Widget" />
+			<column name="element_id" type="bigint" remarks="Element" />
+			<column name="display_order" type="bigint" remarks="Element Display Order" />
+			<column name="name" type="varchar" remarks="Widget Element Display Name" />
+			<column name="display_format" type="varchar" remarks="Widget Element Display Format" />
+			<column name="creatable" type="boolean" remarks="Element data creatable" />
+			<column name="editable" type="boolean" remarks="Element data editable" />
+			<column name="mandatory" type="boolean" remarks="Element data mandatory" />
+			<column name="deletable" type="boolean" remarks="Element data deletable" />
+			<column name="importable" type="boolean" remarks="Element data importable" />
+			<column name="graphable" type="boolean" remarks="Element data graphable" />
+		</createTable>
+		<createSequence sequenceName="widget_element_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="widget_element_id_not_null" tableName="widget_element" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_widget_element_id" tableName="widget_element" columnNames="id" />
+		<addNotNullConstraint constraintName="widget_element_widget_id_notnull" tableName="widget_element" columnName="widget_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="widget_element_element_id_notnull" tableName="widget_element" columnName="element_id" columnDataType="bigint" />
+		<addUniqueConstraint constraintName="widget_element_we_unique" tableName="widget_element" columnNames="widget_id,element_id" />
+		<addNotNullConstraint constraintName="widget_display_order_notnull" tableName="widget_element" columnName="display_order" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="widget_element_name_notnull" tableName="widget_element" columnName="name" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="widget_element_creatable_notnull" tableName="widget_element" columnName="creatable" columnDataType="boolean" />
+		<addNotNullConstraint constraintName="widget_element_editable_notnull" tableName="widget_element" columnName="editable" columnDataType="boolean" />
+		<addNotNullConstraint constraintName="widget_element_mandatory_notnull" tableName="widget_element" columnName="mandatory" columnDataType="boolean" />
+		<addNotNullConstraint constraintName="widget_element_deletable_notnull" tableName="widget_element" columnName="deletable" columnDataType="boolean" />
+		<addNotNullConstraint constraintName="widget_element_importable_notnull" tableName="widget_element" columnName="importable" columnDataType="boolean" />
+		<addNotNullConstraint constraintName="widget_element_graphable_notnull" tableName="widget_element" columnName="graphable" columnDataType="boolean" />
+		<addForeignKeyConstraint constraintName="fk_widget_element_widget_id" referencedTableName="widget" referencedColumnNames="id" 
+										baseColumnNames="widget_id" baseTableName="widget_element" onDelete="CASCADE"/>
+		<addForeignKeyConstraint constraintName="fk_widget_element_element_id" referencedTableName="element" referencedColumnNames="id" 
+										baseColumnNames="element_id" baseTableName="widget_element" onDelete="CASCADE"/>
+	</changeSet>
+
+	<changeSet id="create_table_widget_item_sort_option" author="vijay.katta">
+		<createTable tableName="widget_item_sort_option">
+			<column name="id" type="bigint" />
+			<column name="widget_id" type="bigint" remarks="Widget" />
+			<column name="item_type" type="varchar" remarks="Widget Item Type" />
+			<column name="item" type="varchar" remarks="Widget Item" />
+			<column name="sort_order" type="bigint" remarks="Item Sort Order" />
+			<column name="sort_dir" type="varchar" remarks="Item Sort Direction" />
+		</createTable>
+		<createSequence sequenceName="widget_item_sort_option_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="widget_item_sort_option_id_not_null" tableName="widget_item_sort_option" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_widget_item_sort_option_id" tableName="widget_item_sort_option" columnNames="id" />
+		<addNotNullConstraint constraintName="widget_item_sort_option_widget_id_notnull" tableName="widget_item_sort_option" columnName="widget_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="widget_item_sort_option_item_type_notnull" tableName="widget_item_sort_option" columnName="item_type" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="widget_item_sort_option_item_notnull" tableName="widget_item_sort_option" columnName="item" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="widget_item_sort_option_sort_order_notnull" tableName="widget_item_sort_option" columnName="sort_order" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="widget_item_sort_option_sort_dir_notnull" tableName="widget_item_sort_option" columnName="sort_dir" columnDataType="varchar" />
+		<addUniqueConstraint constraintName="widget_item_sort_option_we_unique" tableName="widget_item_sort_option" columnNames="widget_id,item_type,item" />
+		<addForeignKeyConstraint constraintName="fk_widget_item_sort_option_widget_id" referencedTableName="widget" referencedColumnNames="id" 
+										baseColumnNames="widget_id" baseTableName="widget_item_sort_option" onDelete="CASCADE"/>
+	</changeSet>
+
+	<changeSet id="create_table_page" author="vijay.katta">
+		<createTable tableName="page">
+			<column name="id" type="bigint" />
+			<column name="name" type="varchar" remarks="Page Name" />
+			<column name="dashboard" type="boolean" remarks="Is this a Dashboard Page" />
+			<column name="page_order" type="bigint"  remarks="Page Order"/>
+			<column name="parent_page_id" type="bigint"  remarks="Parent Page"/>
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="page_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="page_id_not_null" tableName="page" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_page_id" tableName="page" columnNames="id" />
+		<addNotNullConstraint constraintName="page_name_notnull" tableName="page" columnName="name" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="page_dashboard_notnull" tableName="page" columnName="dashboard" columnDataType="boolean" />
+		<addNotNullConstraint constraintName="page_date_created_notnull" tableName="page" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="page_last_updated_notnull" tableName="page" columnName="last_updated" columnDataType="timestamp" />
+		<addUniqueConstraint constraintName="page_unique" tableName="page" columnNames="name,parent_page_id" />
+		<addForeignKeyConstraint constraintName="fk_page_parent_page" referencedTableName="page" referencedColumnNames="id" 
+										baseColumnNames="parent_page_id" baseTableName="page" onDelete="CASCADE"/>
+	</changeSet>
+
+	<changeSet id="create_table_page_asset_type" author="vijay.katta">
+		<createTable tableName="page_asset_type">
+			<column name="page_id" type="bigint" remarks="Page" />
+			<column name="asset_type_id" type="bigint" remarks="Applicable Asset Type" />
+		</createTable>
+		<addNotNullConstraint constraintName="page_asset_type_page_id_notnull" tableName="page_asset_type" columnName="page_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="page_asset_type_asset_type_id_notnull" tableName="page_asset_type" columnName="asset_type_id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_page_asset_type" tableName="page_asset_type" columnNames="page_id,asset_type_id" />
+		<addForeignKeyConstraint constraintName="fk_page_asset_type_page_id" referencedTableName="page" referencedColumnNames="id" 
+										baseColumnNames="page_id" baseTableName="page_asset_type" onDelete="CASCADE"/>
+		<addForeignKeyConstraint constraintName="fk_page_asset_type_asset_type_id" referencedTableName="asset_type" referencedColumnNames="id" 
+										baseColumnNames="asset_type_id" baseTableName="page_asset_type" onDelete="CASCADE"/>
+	</changeSet>
+
+	<changeSet id="create_table_page_widget" author="vijay.katta">
+		<createTable tableName="page_widget">
+			<column name="page_id" type="bigint" remarks="Page" />
+			<column name="widget_id" type="bigint" remarks="Widget" />
+			<column name="widget_order" type="bigint" remarks="Widget Order" />
+		</createTable>
+		<addNotNullConstraint constraintName="page_widget_page_id_notnull" tableName="page_widget" columnName="page_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="page_widget_widget_id_notnull" tableName="page_widget" columnName="widget_id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_page_widget" tableName="page_widget" columnNames="page_id,widget_id" />
+		<addNotNullConstraint constraintName="page_widget_order_notnull" tableName="page_widget" columnName="widget_order" columnDataType="bigint" />
+		<addForeignKeyConstraint constraintName="fk_page_widget_page_id" referencedTableName="page" referencedColumnNames="id" 
+										baseColumnNames="page_id" baseTableName="page_widget" onDelete="CASCADE"/>
+		<addForeignKeyConstraint constraintName="fk_page_widget_widget_id" referencedTableName="widget" referencedColumnNames="id" 
+										baseColumnNames="widget_id" baseTableName="page_widget" onDelete="CASCADE"/>
+	</changeSet>
+
+	<changeSet id="create_table_analytics_engine_template" author="vijay.katta">
+		<createTable tableName="analytics_engine_template">
+			<column name="id" type="bigint" />
+			<column name="name" type="varchar" remarks="Analytics Engine Template Name" />
+			<column name="description" type="varchar" remarks="Analytics Engine Template Description" />
+			<column name="template" type="varchar" remarks="Analytics Engine Template" />
+			<column name="return_type" type="varchar" remarks="Analytics Engine Template Return Type" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="analytics_engine_template_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="analytics_engine_template_id_not_null" tableName="analytics_engine_template" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_analytics_engine_template_id" tableName="analytics_engine_template" columnNames="id" />
+		<addNotNullConstraint constraintName="analytics_engine_template_name_notnull" tableName="analytics_engine_template" columnName="name" columnDataType="varchar" />
+		<addUniqueConstraint constraintName="analytics_engine_template_name_unique" tableName="analytics_engine_template" columnNames="name" />
+		<addNotNullConstraint constraintName="analytics_engine_template_description_notnull" tableName="analytics_engine_template" columnName="description" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="analytics_engine_template_template_notnull" tableName="analytics_engine_template" columnName="template" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="analytics_engine_template_return_type_notnull" tableName="analytics_engine_template" columnName="return_type" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="analytics_engine_template_date_created_notnull" tableName="analytics_engine_template" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="analytics_engine_template_last_updated_notnull" tableName="analytics_engine_template" columnName="last_updated" columnDataType="timestamp" />
+	</changeSet>
+
+	<changeSet id="create_table_analytics_engine_template_import" author="vijay.katta">
+		<createTable tableName="analytics_engine_template_import">
+			<column name="template_id" type="bigint" remarks="Analytics Engine Template Id" />
+			<column name="import_order" type="bigint" remarks="Import Order" />
+			<column name="import" type="varchar" remarks="Import" />
+		</createTable>
+		<addNotNullConstraint constraintName="analytics_engine_template_import_template_id_notnull" tableName="analytics_engine_template_import" columnName="template_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="analytics_engine_template_import_import_notnull" tableName="analytics_engine_template_import" columnName="import" columnDataType="varchar" />
+		<addPrimaryKey constraintName="pk_analytics_engine_template_import" tableName="analytics_engine_template_import" columnNames="template_id,import" />
+		<addNotNullConstraint constraintName="analytics_engine_template_import_order_notnull" tableName="analytics_engine_template_import" columnName="import_order" columnDataType="bigint" />
+		<addUniqueConstraint constraintName="analytics_engine_template_import_order_unique" tableName="analytics_engine_template_import" columnNames="template_id,import_order" />
+		<addForeignKeyConstraint constraintName="fk_analytics_engine_template_import_template_id" referencedTableName="analytics_engine_template" referencedColumnNames="id" 
+										baseColumnNames="template_id" baseTableName="analytics_engine_template_import" onDelete="CASCADE"/>
+	</changeSet>
+
+	<changeSet id="create_table_analytics_engine_template_exception" author="vijay.katta">
+		<createTable tableName="analytics_engine_template_exception">
+			<column name="template_id" type="bigint" remarks="Analytics Engine Template Id" />
+			<column name="exception_order" type="bigint" remarks="Exception Order" />
+			<column name="exception" type="varchar" remarks="Exception" />
+		</createTable>
+		<addNotNullConstraint constraintName="analytics_engine_template_exception_template_id_notnull" tableName="analytics_engine_template_exception" columnName="template_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="analytics_engine_template_exception_exception_notnull" tableName="analytics_engine_template_exception" columnName="exception" columnDataType="varchar" />
+		<addPrimaryKey constraintName="pk_analytics_engine_template_exception" tableName="analytics_engine_template_exception" columnNames="template_id,exception" />
+		<addNotNullConstraint constraintName="analytics_engine_template_exception_order_notnull" tableName="analytics_engine_template_exception" columnName="exception_order" columnDataType="bigint" />
+		<addUniqueConstraint constraintName="analytics_engine_template_exception_order_unique" tableName="analytics_engine_template_exception" columnNames="template_id,exception_order" />
+		<addForeignKeyConstraint constraintName="fk_analytics_engine_template_exception_template_id" referencedTableName="analytics_engine_template" referencedColumnNames="id" 
+										baseColumnNames="template_id" baseTableName="analytics_engine_template_exception" onDelete="CASCADE"/>
+	</changeSet>
+
+	<changeSet id="create_table_analytics_engine_template_param" author="vijay.katta">
+		<createTable tableName="analytics_engine_template_param">
+			<column name="template_id" type="bigint" remarks="Analytics Engine Template Id" />
+			<column name="param_order" type="bigint" remarks="Param Order" />
+			<column name="param" type="varchar" remarks="Param" />
+		</createTable>
+		<addNotNullConstraint constraintName="analytics_engine_template_param_template_id_notnull" tableName="analytics_engine_template_param" columnName="template_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="analytics_engine_template_param_param_notnull" tableName="analytics_engine_template_param" columnName="param" columnDataType="varchar" />
+		<addPrimaryKey constraintName="pk_analytics_engine_template_param" tableName="analytics_engine_template_param" columnNames="template_id,param" />
+		<addNotNullConstraint constraintName="analytics_engine_template_param_order_notnull" tableName="analytics_engine_template_param" columnName="param_order" columnDataType="bigint" />
+		<addUniqueConstraint constraintName="analytics_engine_template_param_order_unique" tableName="analytics_engine_template_param" columnNames="template_id,param_order" />
+		<addForeignKeyConstraint constraintName="fk_analytics_engine_template_param_template_id" referencedTableName="analytics_engine_template" referencedColumnNames="id" 
+										baseColumnNames="template_id" baseTableName="analytics_engine_template_param" onDelete="CASCADE"/>
+	</changeSet>
+
+	<changeSet id="create_table_analytics_engine_template_param_type" author="vijay.katta">
+		<createTable tableName="analytics_engine_template_param_type">
+			<column name="template_id" type="bigint" remarks="Analytics Engine Template Id" />
+			<column name="param_type_order" type="bigint" remarks="Param Type Order" />
+			<column name="param_type" type="varchar" remarks="Param Type" />
+		</createTable>
+		<addNotNullConstraint constraintName="analytics_engine_template_param_type_template_id_notnull" tableName="analytics_engine_template_param_type" columnName="template_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="analytics_engine_template_param_type_order_notnull" tableName="analytics_engine_template_param_type" columnName="param_type_order" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_analytics_engine_template_param_type" tableName="analytics_engine_template_param_type" columnNames="template_id,param_type_order" />
+		<addNotNullConstraint constraintName="analytics_engine_template_param_type_param_type_notnull" tableName="analytics_engine_template_param_type" columnName="param_type" columnDataType="varchar" />
+		<addForeignKeyConstraint constraintName="fk_analytics_engine_template_param_type_template_id" referencedTableName="analytics_engine_template" referencedColumnNames="id" 
+										baseColumnNames="template_id" baseTableName="analytics_engine_template_param_type" onDelete="CASCADE"/>
+	</changeSet>
+
+	<changeSet id="create_table_analytics_profile" author="vijay.katta">
+		<createTable tableName="analytics_profile">
+			<column name="id" type="bigint" />
+			<column name="name" type="varchar" remarks="Analytics Profile Name" />
+			<column name="description" type="varchar" remarks="Analytics Profile Description" />
+			<column name="engine_template_id" type="bigint" remarks="Analytics Engine Template Id" />
+			<column name="engine_type" type="varchar" remarks="Analytics Engine Type" />
+			<column name="date_created" type="timestamp" />
+			<column name="last_updated" type="timestamp" />
+		</createTable>
+		<createSequence sequenceName="analytics_profile_seq" startValue="1" incrementBy="1" />
+		<addNotNullConstraint constraintName="analytics_profile_id_not_null" tableName="analytics_profile" columnName="id" columnDataType="bigint" />
+		<addPrimaryKey constraintName="pk_analytics_profile_id" tableName="analytics_profile" columnNames="id" />
+		<addNotNullConstraint constraintName="analytics_profile_name_notnull" tableName="analytics_profile" columnName="name" columnDataType="varchar" />
+		<addUniqueConstraint constraintName="analytics_profile_name_unique" tableName="analytics_profile" columnNames="name" />
+		<addNotNullConstraint constraintName="analytics_profile_description_notnull" tableName="analytics_profile" columnName="description" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="analytics_profile_template_notnull" tableName="analytics_profile" columnName="engine_template_id" columnDataType="bigint" />
+		<addNotNullConstraint constraintName="analytics_profile_engine_type_notnull" tableName="analytics_profile" columnName="engine_type" columnDataType="varchar" />
+		<addNotNullConstraint constraintName="analytics_profile_date_created_notnull" tableName="analytics_profile" columnName="date_created" columnDataType="timestamp" />
+		<addNotNullConstraint constraintName="analytics_profile_last_updated_notnull" tableName="analytics_profile" columnName="last_updated" columnDataType="timestamp" />
+		<addForeignKeyConstraint constraintName="fk_analytics_profile_template_id" referencedTableName="analytics_engine_template" referencedColumnNames="id" 
+										baseColumnNames="engine_template_id" baseTableName="analytics_profile" onDelete="CASCADE"/>
+	</changeSet>
+
+	<changeSet id="create_table_debezium_heartbeat" author="vijay.katta">
+		<createTable tableName="debezium_heartbeat">
+			<column name="last_heartbeat_ts" type="timestamp" defaultValue="NOW()" remarks="Last Heartbeat time" />
+		</createTable>
+		<addPrimaryKey constraintName="pk_debezium_heartbeat" tableName="debezium_heartbeat" columnNames="last_heartbeat_ts" />
+	</changeSet>
+
+	<changeSet id="add_default_entry_debezium_heartbeat" author="vijay.katta">
+        <insert tableName="debezium_heartbeat">
+            <column name="last_heartbeat_ts" value="now()"/>
+        </insert>
+		<rollback>
+			<delete tableName="debezium_heartbeat">
+			</delete>
+		</rollback>
+	</changeSet>
+
+</databaseChangeLog>

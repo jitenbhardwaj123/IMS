@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+	
+	<changeSet id="add_replica_identity" author="vijay.katta">
+		<sql>ALTER TABLE ${default.schema}.snapshot_decimal_data REPLICA IDENTITY FULL</sql>
+		<sql>ALTER TABLE ${default.schema}.snapshot_text_data REPLICA IDENTITY FULL</sql>
+		<sql>ALTER TABLE ${default.schema}.snapshot_boolean_data REPLICA IDENTITY FULL</sql>
+		<sql>ALTER TABLE ${default.schema}.range_decimal_data REPLICA IDENTITY FULL</sql>
+		<sql>ALTER TABLE ${default.schema}.range_text_data REPLICA IDENTITY FULL</sql>
+		<sql>ALTER TABLE ${default.schema}.range_boolean_data REPLICA IDENTITY FULL</sql>
+		<sql>ALTER TABLE ${default.schema}.analytics_engine_template REPLICA IDENTITY FULL</sql>
+		<sql>ALTER TABLE ${default.schema}.analytics_profile REPLICA IDENTITY FULL</sql>
+		<rollback/>
+	</changeSet>
+
+</databaseChangeLog>

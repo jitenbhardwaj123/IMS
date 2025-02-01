@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.oak</groupId>
+		<artifactId>ims</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>ims-database</artifactId>
+	<packaging>jar</packaging>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>3.5.5</version>
+				<configuration>
+					<propertyFile>liquibase.properties</propertyFile>
+					<changeLogFile>changelog/changelog_master.xml</changeLogFile>
+					<driver>org.postgresql.Driver</driver>
+					<promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
+					<defaultSchemaName>ims_schema</defaultSchemaName>
+					<url>${databaseUrl}</url>
+					<username>${databaseUsername}</username>
+					<password>${databasePassword}</password>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+		</dependency>
+	</dependencies>
+</project>

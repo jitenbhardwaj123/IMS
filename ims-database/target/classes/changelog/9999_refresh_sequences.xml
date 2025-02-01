@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+	<changeSet author="vijay.katta" id="refresh_sequences" failOnError="true">
+		<sql>SELECT setval('ims_schema.privilege_seq', (SELECT max(id)+1 FROM ims_schema.privilege));</sql>
+		<sql>SELECT setval('ims_schema.asset_type_seq', (SELECT max(id)+1 FROM ims_schema.asset_type));</sql>
+		<sql>SELECT setval('ims_schema.role_seq', (SELECT max(id)+1 FROM ims_schema.role));</sql>
+		<sql>SELECT setval('ims_schema.user_seq', (SELECT max(id)+1 FROM ims_schema.user));</sql>
+		<sql>SELECT setval('ims_schema.asset_seq', (SELECT max(id)+1 FROM ims_schema.asset));</sql>
+		<sql>SELECT setval('ims_schema.source_seq', (SELECT max(id)+1 FROM ims_schema.source));</sql>
+		<sql>SELECT setval('ims_schema.unit_type_seq', (SELECT max(id)+1 FROM ims_schema.unit_type));</sql>
+		<sql>SELECT setval('ims_schema.unit_seq', (SELECT max(id)+1 FROM ims_schema.unit));</sql>
+		<sql>SELECT setval('ims_schema.limit_type_seq', (SELECT max(id)+1 FROM ims_schema.limit_type));</sql>
+		<sql>SELECT setval('ims_schema.limit_seq', (SELECT max(id)+1 FROM ims_schema.limit));</sql>
+		<sql>SELECT setval('ims_schema.measurement_location_seq', (SELECT max(id)+1 FROM ims_schema.measurement_location));</sql>
+		<sql>SELECT setval('ims_schema.file_resource_seq', (SELECT max(id)+1 FROM ims_schema.file_resource));</sql>
+		<sql>SELECT setval('ims_schema.upload_record_seq', (SELECT max(id)+1 FROM ims_schema.upload_record));</sql>
+		<sql>SELECT setval('ims_schema.link_record_seq', (SELECT max(id)+1 FROM ims_schema.link_record));</sql>
+		<sql>SELECT setval('ims_schema.snapshot_text_data_seq', (SELECT max(id)+1 FROM ims_schema.snapshot_text_data));</sql>
+		<sql>SELECT setval('ims_schema.element_seq', (SELECT max(id)+1 FROM ims_schema.element));</sql>
+		<sql>SELECT setval('ims_schema.snapshot_decimal_data_seq', (SELECT max(id)+1 FROM ims_schema.snapshot_decimal_data));</sql>
+		<sql>SELECT setval('ims_schema.snapshot_boolean_data_seq', (SELECT max(id)+1 FROM ims_schema.snapshot_boolean_data));</sql>
+		<sql>SELECT setval('ims_schema.snapshot_link_data_seq', (SELECT max(id)+1 FROM ims_schema.snapshot_link_data));</sql>
+		<sql>SELECT setval('ims_schema.snapshot_upload_data_seq', (SELECT max(id)+1 FROM ims_schema.snapshot_upload_data));</sql>
+		<sql>SELECT setval('ims_schema.range_decimal_data_seq', (SELECT max(id)+1 FROM ims_schema.range_decimal_data));</sql>
+		<sql>SELECT setval('ims_schema.range_text_data_seq', (SELECT max(id)+1 FROM ims_schema.range_text_data));</sql>
+		<sql>SELECT setval('ims_schema.range_boolean_data_seq', (SELECT max(id)+1 FROM ims_schema.range_boolean_data));</sql>
+		<sql>SELECT setval('ims_schema.range_link_data_seq', (SELECT max(id)+1 FROM ims_schema.range_link_data));</sql>
+		<sql>SELECT setval('ims_schema.range_upload_data_seq', (SELECT max(id)+1 FROM ims_schema.range_upload_data));</sql>
+		<sql>SELECT setval('ims_schema.page_seq', (SELECT max(id)+1 FROM ims_schema.page));</sql>
+		<sql>SELECT setval('ims_schema.filter_crit_seq', (SELECT max(id)+1 FROM ims_schema.filter_criteria));</sql>
+		<sql>SELECT setval('ims_schema.widget_element_seq', (SELECT max(id)+1 FROM ims_schema.widget_element));</sql>
+		<sql>SELECT setval('ims_schema.widget_item_sort_option_seq', (SELECT max(id)+1 FROM ims_schema.widget_item_sort_option));</sql>
+		<sql>SELECT setval('ims_schema.widget_seq', (SELECT max(id)+1 FROM ims_schema.widget));</sql>
+		<sql>SELECT setval('ims_schema.analytics_engine_template_seq', (SELECT max(id)+1 FROM ims_schema.analytics_engine_template));</sql>
+		<sql>SELECT setval('ims_schema.analytics_profile_seq', (SELECT max(id)+1 FROM ims_schema.analytics_profile));</sql>
+		<rollback></rollback>
+	</changeSet>
+
+</databaseChangeLog>
